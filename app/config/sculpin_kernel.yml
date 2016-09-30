@@ -1,0 +1,7 @@
+sculpin_content_types:
+    posts:
+        permalink: blog/:year/:month/:day/:filename/
+# themeに置いたcss/jsなどがうまく参照できないので、
+#  子themeでのoverrideによる日本語化は断念する
+#sculpin_theme:
+#  theme: akky/hoge

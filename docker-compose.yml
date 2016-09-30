@@ -1,0 +1,18 @@
+version: '2'
+services:
+    sculpin_install:
+        build:
+           context: .
+        volumes:
+            - ".:/data"
+        command: [install]
+    sculpin:
+        depends_on:
+            - sculpin_install
+        build:
+           context: .
+        ports:
+            - 80:8000
+        volumes:
+            - ".:/data"
+        command: ["generate", "--watch", "--server"]
