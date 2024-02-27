@@ -1,18 +1,17 @@
-version: '2'
+version: '3.8'
+
 services:
-    sculpin_install:
-        build:
-           context: .
-        volumes:
-            - ".:/data"
-        command: [install]
     sculpin:
-        depends_on:
-            - sculpin_install
+        container_name: sculpin
         build:
            context: .
         ports:
             - 80:8000
         volumes:
-            - ".:/data"
-        command: ["generate", "--watch", "--server"]
+            - .:/data
+        environment:
+            TZ: Asia/Tokyo
+        command: >
+            bash -c "composer install && composer sculpin-watch"
+        #command: ["tail", "-f", "/dev/null"]  # keep container running for debug
+

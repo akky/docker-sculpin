@@ -1,16 +1,24 @@
-FROM debian:jessie
-MAINTAINER Akky AKIMOTO <akimoto@gmail.com>
+FROM php:8.2-cli
+LABEL maintainer="Akky AKIMOTO <akimoto@gmail.com>"
 
-RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y git php5-cli php5-curl && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
-ADD https://download.sculpin.io/sculpin.phar /usr/local/bin/sculpin
-RUN chmod 555 /usr/local/bin/sculpin
+RUN apt-get update -y \
+    && apt-get upgrade -y \
+    && apt-get autoremove -y \
+    && apt-get install -y \
+        software-properties-common \
+        git\
+        libzip-dev \
+        zip \
+        tzdata \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install zip \
+    && apt-get update -y
+# for debug
+#RUN apt-get install -y vim
+
+COPY --from=composer:2.7.1 /usr/bin/composer /usr/bin/composer
 
 VOLUME /data
 WORKDIR /data
+
 EXPOSE 8000
-
-ENTRYPOINT ["sculpin"]
-
